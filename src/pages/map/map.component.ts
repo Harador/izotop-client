@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MapHttpDataService } from '../../services';
 
 @Component({
   selector: 'app-map',
@@ -38,7 +39,10 @@ export class MapComponent {
   constructor(
     //private readonly _mapService: MapService,
     private _cd: ChangeDetectorRef,
-  ) { }
+    private _mapHttpDataService: MapHttpDataService,
+  ) {
+    _mapHttpDataService.getMapData().subscribe(res => console.log(res))
+  }
 
   public ngOnInit(): void {
   }
