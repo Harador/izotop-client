@@ -1,0 +1,52 @@
+<div class="wrapper">
+  <div class="detail">
+    <div class="data" *ngIf="detailData.geo">
+      ландшафт - {{detailData.geo}}
+      <div [style.backgroundColor]="detailData.geoColor" class="color"></div>
+    </div>
+    <div class="data" *ngIf="detailData.country">
+      государство - {{detailData.country}}
+      <div [style.backgroundColor]="detailData.countryColor" class="color"></div>
+    </div>
+  </div>
+  <div class="detail-window" *ngIf="selectedPath">
+    <img src="https://cdn4.vectorstock.com/i/thumb-large/17/08/medieval-heraldic-coat-arms-in-vintage-style-vector-27131708.jpg" alt="">
+    <div class="state-info">
+      <span>Государство {{selectedPath.country}}</span>
+      <a>открыть страницу государства (в разработке)</a>
+    </div>
+    <button class="close-detail" (click)="closeDetail()">Закрыть</button>
+  </div>
+
+  <div class="tools">
+    <select name="sel" [(ngModel)]="selectLayer" (ngModelChange)="changeLayer()">
+      <option value="">Без маски</option>
+      <option value="pol">Государства</option>
+      <option value="geo">География</option>
+    </select>
+    <select name="sel2" [(ngModel)]="selectedSvgSize" (ngModelChange)="changeSvgSize()">
+      <option value="50%">x0.5</option>
+      <option value="100%">x1</option>
+      <option value="200%">x2</option>
+      <option value="300%">x3</option>
+      <option value="500%">x5</option>
+      <option value="800%">x8</option>
+    </select>
+    <div class="span">
+      <label for="admin">изменить ландшафт(демо админки)</label>
+      <select name="sel" id='admin' [(ngModel)]="selectEditGeo">
+        <option value="">Не выбрано</option>
+        <option value="forest">Лес</option>
+        <option value="fields">Поле</option>
+        <option value="hills">Холмы</option>
+        <option value="mountains">Горы</option>
+      </select>
+    </div>
+  </div>
+
+  <div #svgContainer class="svg-container">
+    <object #object type="image/svg+xml" data="../../assets/map.svg"></object>
+<!--    SVG HERE-->
+  </div>
+</div>
+
