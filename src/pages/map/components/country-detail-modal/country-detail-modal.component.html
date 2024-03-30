@@ -1,0 +1,18 @@
+<div class="detail">
+  <div class="data" *ngIf="detailData.geo">
+    ландшафт - {{detailData.geo}}
+    <div [style.backgroundColor]="detailData.geoColor" class="color"></div>
+  </div>
+  <div class="data" *ngIf="detailData.country">
+    государство - {{detailData.country}}
+    <div [style.backgroundColor]="detailData.countryColor" class="color"></div>
+  </div>
+</div>
+<div class="detail-window" *ngIf="selectedPath">
+  <img src="https://cdn4.vectorstock.com/i/thumb-large/17/08/medieval-heraldic-coat-arms-in-vintage-style-vector-27131708.jpg" alt="">
+  <div class="state-info">
+    <span>Государство {{selectedPath.country}}</span>
+    <a>открыть страницу государства (в разработке)</a>
+  </div>
+  <button class="close-detail" (click)="closeDetail()">Закрыть</button>
+</div>
