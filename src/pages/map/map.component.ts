@@ -128,7 +128,10 @@ export class MapComponent {
       el.setAttribute('fill', this.defaultFill);
       el.addEventListener('mouseover', this._mouseOver);
       el.addEventListener('mouseout', this._mouseOut);
-      el.addEventListener('click', this._clickPath)
+      el.addEventListener('click', this._clickPath);
+      // el.addEventListener('click', () => {
+      //   console.log(el.getBoundingClientRect());
+      // })
     })
   }
 
