@@ -26,16 +26,14 @@
     </select>
     <select name="sel2" [(ngModel)]="selectedSvgSize" (ngModelChange)="changeSvgSize()">
       <option value="50%">x0.5</option>
-      <option value="100%">x1</option>
+      <option value="99%">x1</option>
+      <option value="150%">x1.5</option>
       <option value="200%">x2</option>
       <option value="300%">x3</option>
-      <option value="500%">x5</option>
-      <option value="800%">x8</option>
     </select>
     <div class="span">
-      <label for="admin">изменить ландшафт(демо админки)</label>
       <select name="sel" id='admin' [(ngModel)]="selectEditGeo">
-        <option value="">Не выбрано</option>
+        <option value="">Инструмент не выбран</option>
         <option value="forest">Лес</option>
         <option value="fields">Поле</option>
         <option value="hills">Холмы</option>
@@ -44,9 +42,6 @@
     </div>
   </div>
 
-  <div #svgContainer class="svg-container">
-    <object #object type="image/svg+xml" data="../../assets/map.svg"></object>
-<!--    SVG HERE-->
-  </div>
+  <div #svgContainer class="svg-container"></div>
 </div>
 

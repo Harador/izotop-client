@@ -1,19 +1,35 @@
 import { Injectable } from '@angular/core';
 import { IMapData, IMapDataDto, ITile } from '../../interfaces/tile-info.interface';
-import { map, Observable, of } from 'rxjs';
+import { forkJoin, map, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapHttpDataService {
 
-  constructor() { }
+  constructor(
+    private _http: HttpClient,
+  ) {
+  }
 
-  public getMapData(): Observable<IMapData> {
-    return this._loadData().pipe(
-      map(dataDto => this._transformData(dataDto))
+  public map$(): Observable<{svg: string, mapData: IMapData}> {
+    return forkJoin(
+      this._svg$(),
+      this._loadMapData()
+    ).pipe(
+      map(([svg, mapDataDto]: [string, IMapDataDto]) => ({svg, mapData: this._transformData(mapDataDto)}))
     )
   }
+
+  private _svg$(): Observable<string> {
+    return this._http.get('api/maps/map-03.30.2024.22.38.1711827496478.svg', {responseType: 'text'})
+  }
+
+  private _loadMapData(): Observable<IMapDataDto> {
+    return of(this._mockData())
+  }
+
 
   private _transformData(dataDto: IMapDataDto): IMapData {
     const tiles: ITile[] = dataDto.tiles.map(tileDto => ({
@@ -28,11 +44,6 @@ export class MapHttpDataService {
       geoLayers: dataDto.geoLayers,
     }
   }
-
-  private _loadData(): Observable<IMapDataDto> {
-    return of(this._mockData())
-  }
-
   private _mockData(): IMapDataDto {
     return {
       tiles: [

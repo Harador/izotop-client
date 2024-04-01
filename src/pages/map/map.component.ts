@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MapHttpDataService } from '../../services';
@@ -11,9 +11,9 @@ import { MapHttpDataService } from '../../services';
   styleUrl: './map.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MapComponent {
-  @ViewChild('svgContainer') svgContainer!: ElementRef;
-  @ViewChild('object') object!: ElementRef<HTMLObjectElement>
+export class MapComponent implements OnInit {
+  @ViewChild('svgContainer', {static: true}) svgContainer!: ElementRef;
+  //@ViewChild('object') object!: ElementRef<HTMLObjectElement>
 
   public svg!: SVGSVGElement;
   public P!: Element[];
@@ -25,7 +25,7 @@ export class MapComponent {
   //выбранная провка (для ngIF детального окна)
   public selectedPath?: any = null;
 
-  public selectedSvgSize = '100%';
+  public selectedSvgSize = '99%';
   public defaultFill = 'gainsboro';
   //данные в левом верхнем углу, обновляются при наведении
   public detailData = {
@@ -41,22 +41,22 @@ export class MapComponent {
     private _cd: ChangeDetectorRef,
     private _mapHttpDataService: MapHttpDataService,
   ) {
-    _mapHttpDataService.getMapData().subscribe(res => console.log(res))
   }
 
   public ngOnInit(): void {
-  }
-
-  public ngAfterViewInit(): void {
-    this._initSvg();
+    this._mapHttpDataService.map$().subscribe(res => {
+      this.svgContainer.nativeElement.innerHTML = res.svg;
+      console.log(res);
+      this._initSvg();
+    })
   }
 
   public changeSvgSize(): void {
-    this.svg.style.width = this.selectedSvgSize;
+    //this.svg.style.width = this.selectedSvgSize;
     this.svg.style.height = this.selectedSvgSize;
     // вырезать
-    this.object.nativeElement.style.width = this.selectedSvgSize;
-    this.object.nativeElement.style.height = this.selectedSvgSize;
+    // this.object.nativeElement.style.width = this.selectedSvgSize;
+    // this.object.nativeElement.style.height = this.selectedSvgSize;
   }
 
   public closeDetail(): void {
@@ -102,25 +102,10 @@ export class MapComponent {
 
 
   private _initSvg(): void {
-    // this._mapService.getMap()
-    //   .subscribe( d => {
-    //     this.svgContainer.nativeElement.innerHTML = d;
-    //     this.svg = this.svgContainer.nativeElement.querySelector('svg');
-    //     this.changeSvgSize();
-    //     this.P = Array.from(this.svgContainer.nativeElement.querySelectorAll('path'));
-    //     this._initSVGEvents();
-    //   })
-        this.object.nativeElement.addEventListener('load', () => {
-          const svg = this.object.nativeElement?.contentDocument?.querySelector('svg')
-          if(svg) {
-            this.svg = svg
-            this.changeSvgSize();
-            this.P = Array.from(svg.querySelectorAll('path'));
-            this._initSVGEvents();
-            this.changeLayer();
-          }
-        })
-
+    this.svg = this.svgContainer.nativeElement.querySelector('svg');
+    this.changeSvgSize();
+    this.P = Array.from(this.svgContainer.nativeElement.querySelectorAll('path'));
+    this._initSVGEvents();
   }
 
   private _initSVGEvents():void{
