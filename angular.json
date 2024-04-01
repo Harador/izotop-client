@@ -65,7 +65,8 @@
               "buildTarget": "izotop-client:build:production"
             },
             "development": {
-              "buildTarget": "izotop-client:build:development"
+              "buildTarget": "izotop-client:build:development",
+              "proxyConfig": "proxy-local.json"
             }
           },
           "defaultConfiguration": "development"
